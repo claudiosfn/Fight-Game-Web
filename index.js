@@ -15,6 +15,18 @@ class Sprite{
         this.height = 150
         this.lastKey
         this.jumps
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y, 
+            },
+            offset,
+            widht: 100,
+            height: 50,
+        }
+        this.color = color
+        this.isAttacking
+        this.health = 100
     }
     draw(){
         c.fillStyle = 'red'
@@ -94,6 +106,25 @@ function animate() {
         enemy.velocity.x = -5
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
         enemy.velocity.x = 5
+    }
+    //detect for collision
+    //player atack
+    if(
+        retangularCollision({
+            rectangule1: player,
+            rectangule2: enemy,})
+            && player.isAttacking){
+        player.isAttacking = false
+        enemy.health -= 20
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+    }
+
+    //enemy attack
+    if(
+        retangularCollision({rectangule1: enemy, rectangule2: player,}) && enemy.isAttacking){
+        enemy.isAttacking = false
+        player.health -= 20
+        document.querySelector('#playerHealth').style.width = player.health + '%'
     }
 }
 
