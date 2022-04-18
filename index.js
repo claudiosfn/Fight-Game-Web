@@ -21,13 +21,14 @@ class Sprite{
                 y: this.position.y, 
             },
             offset,
-            widht: 100,
+            width: 100,
             height: 50,
         }
         this.color = color
         this.isAttacking
         this.health = 100
     }
+
     draw(){
         c.fillStyle = this.color
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
@@ -37,7 +38,7 @@ class Sprite{
         c.fillStyle = 'green'
         c.fillRect(this.attackBox.position.x, 
                     this.attackBox.position.y,
-                    this.attackBox.widht, 
+                    this.attackBox.width, 
                     this.attackBox.height)
         }
     }
@@ -114,8 +115,8 @@ const keys = {
 
 function retangularCollision({rectangule1, rectangule2}){
     return(
-        rectangule1.attackBox.position.x + rectangule1.attackBox.widht >= rectangule2.position.x &&
-        rectangule1.attackBox.position.x <= rectangule2.position.x + rectangule2.widht &&
+        rectangule1.attackBox.position.x + rectangule1.attackBox.width >= rectangule2.position.x &&
+        rectangule1.attackBox.position.x <= rectangule2.position.x + rectangule2.width &&
         rectangule1.attackBox.position.y + rectangule1.attackBox.height >= rectangule2.position.y &&
         rectangule1.attackBox.position.y <= rectangule2.position.y + rectangule2.height
     )
@@ -147,17 +148,19 @@ function animate() {
     //detect for collision
 
     //player atack
-    if(
-        retangularCollision({rectangule1: player, rectangule2: enemy,}) && player.isAttacking){
-            player.isAttacking = false
-            console.log('go')
+    if(retangularCollision({rectangule1: player,rectangule2: enemy})
+        && player.isAttacking){
+        player.isAttacking = false
+        enemy.health -= 20
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
     }
     
-
-    if(
-        retangularCollision({rectangule1: enemy, rectangule2: player}) && enemy.isAttacking){
-        enemy.isAttacking = false
-        console.log('enemy is attacking')
+    //enemy atack
+    if(retangularCollision({rectangule1: enemy, rectangule2: player})
+        && enemy.isAttacking){
+            enemy.isAttacking = false
+            player.health -= 20
+            document.querySelector('#playerHealth').style.width = player.health + '%'
     }
 }
 
